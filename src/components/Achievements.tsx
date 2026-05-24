@@ -1,72 +1,49 @@
+const achievements = [
+  {
+    title: 'Bronze Medallion',
+    description:
+      'Completed the Bronze Medallion certification, gaining essential water-rescue skills, strong judgment in emergency situations, and foundational training for the lifeguard pathway.',
+    tags: ['Lifesaving', 'First Aid', 'Water Safety'],
+  },
+  {
+    title: 'Bronze Cross',
+    description:
+      'Earned the Bronze Cross certification, advancing my rescue skills, decision-making, and readiness for National Lifeguard training.',
+    tags: ['Lifesaving', 'First Aid', 'Water Safety'],
+  },
+  {
+    title: 'Introduction to Front-End Development',
+    description:
+      'Learned the basics of Front-End Development, primarily focusing on HTML and CSS. Worked a little bit with Bootstrap CSS as well.',
+    tags: ['HTML', 'CSS', 'Bootstrap CSS'],
+  },
+  {
+    title: 'Game Design with Unreal Engine',
+    description:
+      'Worked in Unreal Engine, creating a simple third-person parkour game through UE5 Blueprints. Also learned how to implement UI elements into UE5, creating menus and win screens.',
+    tags: ['UE5', 'Blueprints'],
+  },
+]
+
 function Achievements() {
   return (
     <section className="section achievements">
-      <h2>Certifications</h2>
-
+      <h2 className="reveal">Certifications</h2>
       <div className="achievements-list">
-
-        <div className="achievement-item">
-          <div className="achievement-content">
-            <h3>Bronze Medallion</h3>
-            <p>
-              Completed the Bronze Medallion certification, gaining essential water-rescue
-              skills, strong judgment in emergency situations, and foundational training
-              for the lifeguard pathway.
-            </p>
-
-            <div className="tech-tags">
-              <span className="tech-tag">Lifesaving</span>
-              <span className="tech-tag">First Aid</span>
-              <span className="tech-tag">Water Safety</span>
+        {achievements.map((item, i) => (
+          <div key={item.title} className="achievement-item reveal">
+            <div className="achievement-number">{String(i + 1).padStart(2, '0')}</div>
+            <div className="achievement-content">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <div className="tech-tags">
+                {item.tags.map(tag => (
+                  <span key={tag} className="tech-tag">{tag}</span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="achievement-item">
-          <div className="achievement-content">
-            <h3>Bronze Cross</h3>
-            <p>
-              Earned the Bronze Cross certification, advancing my rescue skills,
-              decision-making, and readiness for National Lifeguard training.
-            </p>
-
-            <div className="tech-tags">
-              <span className="tech-tag">Lifesaving</span>
-              <span className="tech-tag">First Aid</span>
-              <span className="tech-tag">Water Safety</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="achievement-item">
-          <div className="achievement-content">
-            <h3>Introduction to Front-End Development</h3>
-            <p>
-              Learned the basics of Front-End Development, primarily focusing on HTML and CSS. Worked a little bit with Bootstrap CSS as well.
-            </p>
-
-            <div className="tech-tags">
-              <span className="tech-tag">HTML</span>
-              <span className="tech-tag">CSS</span>
-              <span className="tech-tag">Bootstrap CSS</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="achievement-item">
-          <div className="achievement-content">
-            <h3>Game Design with Unreal Engine</h3>
-            <p>
-              Worked in Unreal Engine, creating a simple third-person parkour game through UE5 Blueprints. Also learned how to implement UI elements into UE5, creating menus and win screens.
-            </p>
-
-            <div className="tech-tags">
-              <span className="tech-tag">UE5</span>
-              <span className="tech-tag">Blueprints</span>
-            </div>
-          </div>
-        </div>
-
+        ))}
       </div>
     </section>
   )
