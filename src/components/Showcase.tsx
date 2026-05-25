@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import machinalytics from '../assets/images/showcase/machinalytics.png'
 import projectseverance from '../assets/images/showcase/projectseverance.png'
-import baguettes from '../assets/images/showcase/baguettes.png'
-import riveote from '../assets/images/showcase/riveote.png'
+import ralph from '../assets/images/showcase/ralph.png'
 import colorfullamp from '../assets/images/showcase/colorfullamp.png'
 import blast from '../assets/images/showcase/blast.png'
 import effective from '../assets/images/showcase/effective.png'
 
-type Category = 'all' | 'featured' | 'collaborative' | 'contributed'
+type Category = 'featured' | 'other' | 'contributed'
+type FilterCategory = 'all' | 'projects' | 'contributed'
 
 interface Project {
   id: string
@@ -19,23 +19,11 @@ interface Project {
   links: {
     github: string
     demo?: string
+    devpost?: string
   }
 }
 
 const projects: Project[] = [
-  {
-    id: 'machinalytics',
-    title: 'Machinalytics',
-    description:
-      'Machinalytics is an all-in-one platform for exploring, visualizing, and collaborating on machine learning projects. It combines data visualization, model analysis, and real-time communication into a single, seamless app.',
-    image: machinalytics,
-    tags: ['HTML', 'CSS', 'JavaScript', 'React', 'Python', 'Figma'],
-    category: 'featured',
-    links: {
-      github: 'https://github.com/MisplacedOrange/Rythm-Hacks',
-      demo: 'https://www.youtube.com/watch?v=O0SSgzEZgnY',
-    },
-  },
   {
     id: 'project-severance',
     title: 'Project Severance',
@@ -47,30 +35,35 @@ const projects: Project[] = [
     links: {
       github: 'https://github.com/Deific-Games/Project-Severance',
       demo: 'https://www.youtube.com/watch?v=rjIQ288c1-U',
+      devpost: 'https://devpost.com/software/anomaly-7kgip6'
     },
   },
   {
-    id: 'baguettes',
-    title: 'Baguettes',
+    id: 'ralph',
+    title: 'Ralph',
     description:
-      'This mod adds Baguettes to Minecraft! Crafted from 3 bread, this item fully restores hunger and saturation.',
-    image: baguettes,
-    tags: ['Java', 'Gradle'],
-    category: 'featured',
+      'Ralph is an autonomous navigation system for Raspberry Pi robots, combining YOLOv8 object detection with MiDaS depth estimation for real-time obstacle avoidance and voice-guided feedback.',
+    image: ralph,
+    tags: ['Python', 'PyTorch', 'OpenCV', 'Raspberry Pi'],
+    category: 'other',
     links: {
-      github: 'https://github.com/Crackle2K/Baguettes',
+      github: 'https://github.com/CDX-1/ralph',
+      demo: 'https://www.youtube.com/watch?v=xcyQQ1cKLxs',
+      devpost: 'https://devpost.com/software/ralph-1tkaxb'
     },
   },
   {
-    id: 'riveote',
-    title: 'Riveote',
+    id: 'machinalytics',
+    title: 'Machinalytics',
     description:
-      'Riveote is a minimalist quote generator designed to inspire creativity and focus. Featuring a clean UI, it delivers motivational quotes you can instantly copy.',
-    image: riveote,
-    tags: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind CSS'],
-    category: 'collaborative',
+      'Machinalytics is an all-in-one platform for exploring, visualizing, and collaborating on machine learning projects. It combines data visualization, model analysis, and real-time communication into a single, seamless app.',
+    image: machinalytics,
+    tags: ['HTML', 'CSS', 'JavaScript', 'React', 'Python', 'Figma'],
+    category: 'other',
     links: {
-      github: 'https://github.com/MisplacedOrange/Riveote',
+      github: 'https://github.com/MisplacedOrange/Rythm-Hacks',
+      demo: 'https://www.youtube.com/watch?v=O0SSgzEZgnY',
+      devpost: 'https://devpost.com/software/machinalytics'
     },
   },
   {
@@ -110,10 +103,9 @@ const projects: Project[] = [
   },
 ]
 
-const categoryLabels: Record<Category, string> = {
+const categoryLabels: Record<FilterCategory, string> = {
   all: 'All',
-  featured: 'Featured',
-  collaborative: 'Collaborative',
+  projects: 'Projects',
   contributed: 'Contributed To',
 }
 
@@ -129,11 +121,90 @@ const DemoIcon = () => (
   </svg>
 )
 
-function ProjectItem({ project, index }: { project: Project; index: number }) {
+const DevpostIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6.002 1.61L0 12.004 6.002 22.39h11.996L24 12.004 17.998 1.61zm1.593 4.084h4.811c3.173 0 5.341 1.893 5.341 6.31 0 4.517-2.168 6.31-5.341 6.31H7.595zm2.001 2.008v8.604h2.81c2.125 0 3.337-1.24 3.337-4.302 0-3.06-1.212-4.302-3.337-4.302z"/>
+  </svg>
+)
+
+function FeaturedHero({ projects }: { projects: Project[] }) {
+  const [active, setActive] = useState(0)
+  const pausedRef = useRef(false)
+
+  useEffect(() => {
+    if (projects.length <= 1) return
+    const id = setInterval(() => {
+      if (!pausedRef.current) {
+        setActive(i => (i + 1) % projects.length)
+      }
+    }, 6000)
+    return () => clearInterval(id)
+  }, [projects.length])
+
+  if (projects.length === 0) return null
+  const project = projects[active]
+
   return (
-    <div className="project-item reveal">
-      <div className="project-number">{String(index + 1).padStart(2, '0')}</div>
-      <div className="project-info">
+    <div
+      className="featured-hero"
+      onMouseEnter={() => { pausedRef.current = true }}
+      onMouseLeave={() => { pausedRef.current = false }}
+    >
+      <div className="featured-content">
+        <span className="featured-badge">Featured</span>
+        <h2 className="featured-title">{project.title}</h2>
+        <p className="featured-description">{project.description}</p>
+        <div className="tech-tags">
+          {project.tags.map(tag => (
+            <span key={tag} className="tech-tag featured-tech-tag">{tag}</span>
+          ))}
+        </div>
+        <div className="featured-actions">
+          <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="featured-btn featured-btn-primary">
+            <GitHubIcon /> GitHub
+          </a>
+          {project.links.demo && (
+            <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="featured-btn featured-btn-secondary">
+              <DemoIcon /> Demo
+            </a>
+          )}
+          {project.links.devpost && (
+            <a href={project.links.devpost} target="_blank" rel="noopener noreferrer" className="featured-btn featured-btn-secondary">
+              <DevpostIcon /> Devpost
+            </a>
+          )}
+        </div>
+      </div>
+      <div className="featured-image-panel">
+        {projects.map((p, i) => (
+          <div key={p.id} className={`featured-image-slide${i === active ? ' active' : ''}`}>
+            <img src={p.image} alt={p.title} />
+          </div>
+        ))}
+      </div>
+      {projects.length > 1 && (
+        <div className="featured-indicators">
+          {projects.map((_, i) => (
+            <button
+              key={i === active ? `ind-${i}-active` : `ind-${i}`}
+              className={`featured-indicator${i === active ? ' active' : ''}`}
+              onClick={() => setActive(i)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <div className="project-card reveal">
+      <div className="project-card-image">
+        <img src={project.image} alt={project.title} />
+      </div>
+      <div className="project-card-body">
+        <span className="project-card-number">{String(index + 1).padStart(2, '0')}</span>
         <h3>{project.title}</h3>
         <p>{project.description}</p>
         <div className="tech-tags">
@@ -150,10 +221,12 @@ function ProjectItem({ project, index }: { project: Project; index: number }) {
               <DemoIcon /> Demo
             </a>
           )}
+          {project.links.devpost && (
+            <a href={project.links.devpost} target="_blank" rel="noopener noreferrer" className="project-link">
+              <DevpostIcon /> Devpost
+            </a>
+          )}
         </div>
-      </div>
-      <div className="project-thumb">
-        <img src={project.image} alt={project.title} />
       </div>
     </div>
   )
@@ -177,6 +250,11 @@ function ContributedItem({ project }: { project: Project }) {
           <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="project-link">
             <GitHubIcon /> GitHub
           </a>
+          {project.links.devpost && (
+            <a href={project.links.devpost} target="_blank" rel="noopener noreferrer" className="project-link">
+              <DevpostIcon /> Devpost
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -184,8 +262,10 @@ function ContributedItem({ project }: { project: Project }) {
 }
 
 function Showcase() {
-  const [categoryFilter, setCategoryFilter] = useState<Category>('all')
+  const [categoryFilter, setCategoryFilter] = useState<FilterCategory>('all')
   const [techFilter, setTechFilter] = useState<string | null>(null)
+
+  const featuredProjects = useMemo(() => projects.filter(p => p.category === 'featured'), [])
 
   const allTags = useMemo(() => {
     const tags = new Set<string>()
@@ -193,27 +273,47 @@ function Showcase() {
     return Array.from(tags).sort()
   }, [])
 
-  const filteredProjects = useMemo(() => {
-    return projects.filter(project => {
-      const matchesCategory = categoryFilter === 'all' || project.category === categoryFilter
-      const matchesTech = !techFilter || project.tags.includes(techFilter)
+  const filteredList = useMemo(() => {
+    return projects.filter(p => {
+      const isProject = p.category === 'featured' || p.category === 'other'
+      const matchesCategory =
+        categoryFilter === 'all' ||
+        (categoryFilter === 'projects' && isProject) ||
+        (categoryFilter === 'contributed' && p.category === 'contributed')
+      const matchesTech = !techFilter || p.tags.includes(techFilter)
       return matchesCategory && matchesTech
     })
   }, [categoryFilter, techFilter])
 
-  const featuredProjects = filteredProjects.filter(p => p.category === 'featured')
-  const collaborativeProjects = filteredProjects.filter(p => p.category === 'collaborative')
-  const contributedProjects = filteredProjects.filter(p => p.category === 'contributed')
+  const listProjects = filteredList.filter(p => p.category === 'other' || p.category === 'featured')
+  const contributedProjects = filteredList.filter(p => p.category === 'contributed')
+
+  useEffect(() => {
+    const section = document.querySelector('.showcase')
+    if (!section) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible')
+        })
+      },
+      { threshold: 0.1 }
+    )
+    section.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [filteredList])
 
   return (
     <section className="section showcase">
+      <FeaturedHero projects={featuredProjects} />
+
       <h2 className="reveal">Projects</h2>
 
       <div className="filter-controls reveal reveal-delay-1">
         <div className="filter-group">
           <span className="filter-label">Category</span>
           <div className="filter-buttons">
-            {(Object.keys(categoryLabels) as Category[]).map(cat => (
+            {(['all', 'projects', 'contributed'] as FilterCategory[]).map(cat => (
               <button
                 key={cat}
                 className={`filter-btn ${categoryFilter === cat ? 'active' : ''}`}
@@ -246,54 +346,31 @@ function Showcase() {
         </div>
       </div>
 
-      {filteredProjects.length === 0 && (
+      {filteredList.length === 0 && (
         <div className="no-results">
           <p>No projects match the selected filters.</p>
         </div>
       )}
 
-      {categoryFilter === 'all' ? (
-        <>
-          {featuredProjects.length > 0 && (
-            <div className="showcase-section">
-              <h3 className="section-heading reveal">Featured</h3>
-              {featuredProjects.map((p, i) => (
-                <ProjectItem key={p.id} project={p} index={i} />
-              ))}
-            </div>
-          )}
-          {collaborativeProjects.length > 0 && (
-            <div className="showcase-section">
-              <h3 className="section-heading reveal">Collaborative</h3>
-              {collaborativeProjects.map((p, i) => (
-                <ProjectItem key={p.id} project={p} index={i} />
-              ))}
-            </div>
-          )}
-          {contributedProjects.length > 0 && (
-            <div className="showcase-section">
-              <h3 className="section-heading reveal">Contributed To</h3>
-              <div className="contributed-grid">
-                {contributedProjects.map(p => (
-                  <ContributedItem key={p.id} project={p} />
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      ) : categoryFilter === 'contributed' ? (
+      {listProjects.length > 0 && (
         <div className="showcase-section">
-          <div className="contributed-grid">
-            {filteredProjects.map(p => (
-              <ContributedItem key={p.id} project={p} />
+          <h3 className="section-heading reveal">Projects</h3>
+          <div className="projects-grid">
+            {listProjects.map((p, i) => (
+              <ProjectCard key={p.id} project={p} index={i} />
             ))}
           </div>
         </div>
-      ) : (
+      )}
+
+      {contributedProjects.length > 0 && (
         <div className="showcase-section">
-          {filteredProjects.map((p, i) => (
-            <ProjectItem key={p.id} project={p} index={i} />
-          ))}
+          <h3 className="section-heading reveal">Contributed To</h3>
+          <div className="contributed-grid">
+            {contributedProjects.map(p => (
+              <ContributedItem key={p.id} project={p} />
+            ))}
+          </div>
         </div>
       )}
     </section>
