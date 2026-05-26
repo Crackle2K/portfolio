@@ -2,9 +2,11 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import machinalytics from '../assets/images/showcase/machinalytics.png'
 import projectseverance from '../assets/images/showcase/projectseverance.png'
 import ralph from '../assets/images/showcase/ralph.png'
+import vantage from '../assets/images/showcase/vantage.png'
 import colorfullamp from '../assets/images/showcase/colorfullamp.png'
 import blast from '../assets/images/showcase/blast.png'
 import effective from '../assets/images/showcase/effective.png'
+import hackclub from '../assets/images/showcase/hackclub.png'
 
 type Category = 'featured' | 'other' | 'contributed'
 type FilterCategory = 'all' | 'projects' | 'contributed'
@@ -16,14 +18,29 @@ interface Project {
   image: string
   tags: string[]
   category: Category
+  wide?: boolean
   links: {
     github: string
     demo?: string
     devpost?: string
+    vercel?: string
   }
 }
 
 const projects: Project[] = [
+  {
+    id: 'vantage',
+    title: 'Vantage',
+    description:
+      'Vantage is a trust-first local business discovery platform where visibility is earned through verified visits and community activity — not ad spend — giving independent shops a fair shot against chains.',
+    image: vantage,
+    tags: ['HTML', 'CSS', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'React', 'Rust', 'Supabase', 'Vercel', 'Axum'],
+    category: 'other',
+    links: {
+      github: 'https://github.com/Crackle2K/Vantage',
+      vercel: 'https://vantage-ruddy.vercel.app'
+    },
+  },
   {
     id: 'project-severance',
     title: 'Project Severance',
@@ -101,6 +118,20 @@ const projects: Project[] = [
       github: 'https://github.com/Ladysnake/Effective',
     },
   },
+  {
+    id: 'hackclub-site',
+    title: "Hack Club's Site",
+    description:
+      "The open-source codebase behind hackclub.com, built and maintained by the Hack Club community. Hack Club is the world’s largest nonprofit movement of teenagers making cool projects.",
+    image: hackclub,
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+    category: 'contributed',
+    wide: true,
+    links: {
+      github: 'https://github.com/hackclub/site',
+      vercel: 'https://hackclub.com'
+    },
+  },
 ]
 
 const categoryLabels: Record<FilterCategory, string> = {
@@ -124,6 +155,12 @@ const DemoIcon = () => (
 const DevpostIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M6.002 1.61L0 12.004 6.002 22.39h11.996L24 12.004 17.998 1.61zm1.593 4.084h4.811c3.173 0 5.341 1.893 5.341 6.31 0 4.517-2.168 6.31-5.341 6.31H7.595zm2.001 2.008v8.604h2.81c2.125 0 3.337-1.24 3.337-4.302 0-3.06-1.212-4.302-3.337-4.302z"/>
+  </svg>
+)
+
+const VercelIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M24 22.525H0l12-21.05 12 21.05z"/>
   </svg>
 )
 
@@ -171,6 +208,11 @@ function FeaturedHero({ projects }: { projects: Project[] }) {
           {project.links.devpost && (
             <a href={project.links.devpost} target="_blank" rel="noopener noreferrer" className="featured-btn featured-btn-secondary">
               <DevpostIcon /> Devpost
+            </a>
+          )}
+          {project.links.vercel && (
+            <a href={project.links.vercel} target="_blank" rel="noopener noreferrer" className="featured-btn featured-btn-secondary">
+              <VercelIcon /> Vercel
             </a>
           )}
         </div>
@@ -226,6 +268,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               <DevpostIcon /> Devpost
             </a>
           )}
+          {project.links.vercel && (
+            <a href={project.links.vercel} target="_blank" rel="noopener noreferrer" className="project-link">
+              <VercelIcon /> Vercel
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -234,7 +281,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 function ContributedItem({ project }: { project: Project }) {
   return (
-    <div className="contributed-card reveal">
+    <div className={`contributed-card reveal${project.wide ? ' contributed-card--wide' : ''}`}>
       <div className="contributed-image">
         <img src={project.image} alt={project.title} />
       </div>
@@ -253,6 +300,11 @@ function ContributedItem({ project }: { project: Project }) {
           {project.links.devpost && (
             <a href={project.links.devpost} target="_blank" rel="noopener noreferrer" className="project-link">
               <DevpostIcon /> Devpost
+            </a>
+          )}
+          {project.links.vercel && (
+            <a href={project.links.vercel} target="_blank" rel="noopener noreferrer" className="project-link">
+              <VercelIcon /> Vercel
             </a>
           )}
         </div>
