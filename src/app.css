@@ -91,17 +91,25 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 2.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.18);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.18);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.25),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .navbar:hover {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 12px 44px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .nav-logo {
@@ -212,7 +220,8 @@ body {
 
 .hero-heading {
   line-height: 0.88;
-  margin-bottom: 3rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
 }
 
 .hero-line {
@@ -233,27 +242,31 @@ body {
   transform: translateY(0);
 }
 
-.hero-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+.hero-fade {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 0.9s ease, transform 0.9s var(--ease);
 }
 
-.hero-meta.is-visible {
+.hero-fade.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.hero-subtitle {
+.hero-subheading {
+  text-align: center;
   font-size: 1rem;
   color: var(--muted);
   font-weight: 400;
   letter-spacing: 0.04em;
+  margin-bottom: 3rem;
+}
+
+.hero-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
 }
 
 .hero-scroll {
@@ -916,6 +929,61 @@ footer p {
 
 .footer-links a:hover {
   color: var(--text);
+}
+
+/* ─── Tech Stack ─── */
+.stack-row {
+  margin-bottom: 3.5rem;
+}
+
+.stack-row:last-child {
+  margin-bottom: 0;
+}
+
+.stack-row-label {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.stack-cards {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stack-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 130px;
+  transition: border-color 0.25s;
+}
+
+.stack-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.stack-card img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.stack-card span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
 }
 
 /* ─── Responsive ─── */
